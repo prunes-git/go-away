@@ -16,6 +16,7 @@ var DefaultFalsePositives = []string{
 	"banal",
 	"basement",
 	"bass",
+	"butth", // but they, but those, but then
 	"cass", // cassie, cassandra, carcass
 	"butter", // butter, butterfly
 	"butthe",

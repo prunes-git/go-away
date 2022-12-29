@@ -138,6 +138,33 @@ func (g *ProfanityDetector) ExtractProfanity(s string) string {
 	return ""
 }
 
+func (g *ProfanityDetector) ExtractProfanities(s string) ([]string, []int) {
+        s, _ = g.sanitize(s, false)
+        var words []string
+	var counts []int
+        // Check for false negatives
+        for _, word := range g.falseNegatives {
+                if count := strings.Count(s, word); count > 0 {
+                        s = strings.ReplaceAll(s, word, "*")
+			words = append(words, word)
+                        counts = append(counts, count)
+                }
+        }
+        // Remove false positives
+        for _, word := range g.falsePositives {
+                s = strings.Replace(s, word, "", -1)
+        }
+        // Check for profanities
+        for _, word := range g.profanities {
+                if count := strings.Count(s, word); count > 0 {
+                        s = strings.ReplaceAll(s, word, "*")
+			words = append(words, word)
+                        counts = append(counts, count)
+                }
+        }
+        return words, counts
+}
+
 func (g *ProfanityDetector) indexToRune(s string, index int) int {
 	count := 0
 	for i := range s {
